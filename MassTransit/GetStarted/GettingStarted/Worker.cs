@@ -1,22 +1,22 @@
-namespace GettingStarted;
+using GettingStarted;
+using MassTransit;
 
 public class Worker : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    readonly IBus _bus;
 
-    public Worker(ILogger<Worker> logger)
+    public Worker(IBus bus)
     {
-        _logger = logger;
+        _bus = bus;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            if (_logger.IsEnabled(LogLevel.Information))
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            }
+            var message = new Message { Text = $"The time is {DateTimeOffset.Now}" };
+            await _bus.Publish(message);
+            Console.WriteLine("Message published: " + message.Text);
             await Task.Delay(1000, stoppingToken);
         }
     }

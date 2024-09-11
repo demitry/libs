@@ -7,3 +7,10 @@ mkdir GettingStarted
 dotnet new worker -n GettingStarted
 ```
 
+```
+cd GettingStarted
+dotnet add package MassTransit.AspNetCore
+```
+
+dotnet run
+

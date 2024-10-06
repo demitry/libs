@@ -1,15 +1,23 @@
-namespace Company.Consumers
-{
-    using System.Threading.Tasks;
-    using MassTransit;
-    using Contracts;
+﻿namespace GettingStarted.Consumers;
 
-    public class GettingStartedConsumer :
-        IConsumer<GettingStarted>
+using System.Threading.Tasks;
+using Contracts;
+using MassTransit;
+using Microsoft.Extensions.Logging;
+
+public class GettingStartedConsumer :
+    IConsumer<GettingStarted>
+{
+    readonly ILogger<GettingStartedConsumer> _logger;
+
+    public GettingStartedConsumer(ILogger<GettingStartedConsumer> logger)
     {
-        public Task Consume(ConsumeContext<GettingStarted> context)
-        {
-            return Task.CompletedTask;
-        }
+        _logger = logger;
+    }
+
+    public Task Consume(ConsumeContext<GettingStarted> context)
+    {
+        _logger.LogInformation("Received Text: {Text}", context.Message.Value);
+        return Task.CompletedTask;
     }
 }
